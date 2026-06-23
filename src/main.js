@@ -636,86 +636,86 @@ function initScrollPipeline() {
 ------------------------------------------------------- */
 const projectsDetails = [
   {
-    title: "AGRISERVE AI Platform",
-    tech: "React.js / Firebase / AI API / Modern Glassmorphism UI",
+    title: "AgriServe Platform",
+    tech: "React / Python (Flask) / SQL / Machine Learning",
     role: "Full Stack Developer - Agriculture Tech",
     img: "/src/assets/project1_preview.jpg",
-    desc: "AGRISERVE is an AI-powered agriculture support portal designed to bolster local farming operations. By providing instant digital gateways, it facilitates regional language translation models, matches nearby manual farm labor requests, calculates agricultural EMI schedules, and offers toll-free farmer calling channels to improve digital inclusion.",
+    desc: "AgriServe is a full-stack web and mobile portal built to connect farmers, laborers, and fertilizer suppliers. It streamlines labor allocation, calculates machinery amortization schedules (EMI), and provides a booking interface for supplies. The application won 4th place at the Vishesh 2K24 inter-college project expo.",
     features: [
-      "Labour Dispatcher: Locates and channels manual workers within 15km coordinates",
-      "Farmers EMI: Calculates machinery amortization and interest rates",
-      "Fertilizer Scheduler: Real-time logistics ordering systems integrated with Firebase",
-      "Local Translations: Supports regional dialects for simplified layout browsing"
+      "Labor Allocator: Channels nearby manual farm workers coordinates-based",
+      "EMI Calculator: Computes machinery interest rates and amortization plans",
+      "Fertilizer Supplier: Direct supplies ordering portal with SQL persistence",
+      "Vishesh 2K24 Laurels: Secured 4th place among 90+ competing projects"
     ],
     link: "#"
   },
   {
-    title: "Smart Irrigation Advisor",
-    tech: "Python / Streamlit / Scikit-learn / Weather Datasets",
-    role: "ML Developer - Environmental Tech",
+    title: "AI Multi-Agent Career Guidance System",
+    tech: "Python / Multi-Agent AI / Google Cloud / Gemini APIs",
+    role: "AI System Developer - Career Agent Orchestration",
     img: "/src/assets/project2_preview.jpg",
-    desc: "An AI-based agricultural planning system compiling historical and real-time climatic records. Using classification models, it maps atmospheric humidity, soil temperature, and rainfall predictions to compute precise soil moisture requirements, providing recommendations on Streamlit layouts to minimize water waste.",
+    desc: "A collaborative multi-agent AI system designed to evaluate student profiles and recommend optimized career paths. Using orchestrator and specialist agent nodes, it makes structured career path decisions through agent collaboration. Showcased at Google Agentathon 2025 as part of a Guinness World Record hackathon.",
     features: [
-      "Weather-linked volume recommendations updated hourly",
-      "Optimized soil saturation mapping minimizing water use by 30%",
-      "Clean Streamlit operational cockpit for telemetry viewing",
-      "Responsive predictive algorithms mapping localized rain projections"
+      "Multi-Agent scaffold coordinating orchestrator and worker nodes",
+      "Profile Evaluator: Performs semantic assessment of academic achievements",
+      "Career Recommender: Suggests pathways based on cooperative AI decisions",
+      "Guinness World Record Event: Displayed at GDG Agentathon 2025"
     ],
     link: "#"
   },
   {
-    title: "AI Education Management System",
-    tech: "React / Firebase / Google Gemini API / Node Schedulers",
-    role: "Full Stack Architect - EdTech",
+    title: "AI-Based Smart Irrigation Advisor",
+    tech: "Python / Machine Learning / Weather REST APIs",
+    role: "Machine Learning Engineer - Predictive Ecology",
     img: "/src/assets/project3_preview.jpg",
-    desc: "A comprehensive academic administration ecosystem engineered to automate educational logistics. Powered by Google Gemini orchestrators, it automates exam calendars, generates collision-free school timetables, and deploys specialized AI Teacher Agents and buddy helpers to guide students through real-time coursework support.",
+    desc: "An irrigation recommendation engine integrating real-time weather API telemetry with predictive ML algorithms. Maps local precipitation, soil humidity, and atmospheric temperature to recommend precise soil moisture replenishment levels, reducing water waste by up to 30%.",
     features: [
-      "Timetable Generator: Auto-resolves teacher availability and room limits",
-      "AI Teacher Agent: Custom curriculum tutoring chatbot built on Gemini nodes",
-      "Attendance Tracker & Exam Scheduler: Unified databases hosted on Firebase",
-      "Interactive Learning Buddy: Answers student queries and provides course summaries"
+      "Real-Time Telemetry: Pulls regional weather metrics via REST APIs",
+      "ML Saturation Estimator: Maps climatic indexes to soil moisture levels",
+      "Eco-Friendly Operation: Minimizes water resources waste by 30%",
+      "Deployment: Deployed in interactive Streamlit web environments"
     ],
     link: "#"
   },
   {
-    title: "Medical Prescription Reader AI",
-    tech: "Python / OCR Systems / OpenCV / Gemini NLP Model",
-    role: "AI Developer - Computer Vision",
+    title: "AI & Data Analytics Dashboard",
+    tech: "Python / Pandas / NumPy / Power BI",
+    role: "AI & Data Analytics Intern",
     img: "/src/assets/project3_preview.jpg",
-    desc: "A healthcare vision scanner addressing cursive scripting challenges in medical prescriptions. Utilizing OpenCV filter chains to optimize manuscript thresholds, it feeds images to OCR packages and Gemini parameters, extracting active drug names, dose frequencies, and safety warnings inside an interactive chatbot shell.",
+    desc: "Developed during the Industry Internship Program. Applies machine learning models on structured datasets to extract valuable business analytics insights. Built complete Python data pipelines and loaded dashboards in Power BI for professional reporting.",
     features: [
-      "Custom OpenCV grayscale and binary filter pipelines for handwritten text",
-      "High-accuracy OCR manuscript parsing for drug nomenclature matching",
-      "Interactive Chatbot: Deciphers instructions and answers medicine usage questions",
-      "OCR-to-Text: Produces sharp, downloadable prescription summaries"
+      "Data Wrangling: Processes structured datasets using Python & Pandas",
+      "Statistical Inference: Fits ML models to extract business analytics",
+      "Visualization: Deploys Power BI dashboards for corporate reporting",
+      "Data Pipelines: Automates raw CSV parsing and feature computations"
     ],
     link: "#"
   },
   {
-    title: "Employee Salary Predictor",
-    tech: "Python / CatBoost / Scikit-learn / Streamlit Web",
-    role: "Machine Learning Engineer - Analytics",
+    title: "Computer Vision & AIML Suite",
+    tech: "Python / OpenCV / Supervised ML",
+    role: "AIML Project Intern - Edunet",
     img: "/src/assets/project1_preview.jpg",
-    desc: "A business intelligence predictive dashboard built to sort salary classes based on experience indices and demographic variables. Leveraging CatBoost gradient boosting classification routines, the dashboard handles model comparative benchmarks, data pre-processing, and parameter tuning in a single Streamlit deployment.",
+    desc: "Developed as part of the Edunet internship in collaboration with Microsoft & SAP. Covers real-world supervised learning models and OpenCV vision pipelines to build and deploy automated image thresholding and classification tools.",
     features: [
-      "Gradient Boosting model compiling professional metrics at ~86.5% accuracy",
-      "Model Comparison: Real-time accuracy metrics mapping SVM, Random Forest, and CatBoost",
-      "Feature Importance: Interactive visualizations showing top salary drivers",
-      "Responsive layout allowing real-time parameter tweaking and predictions"
+      "OpenCV Image Processing: Custom grayscale and threshold filter models",
+      "Supervised Learning: Benchmarks SVM, Random Forest, and classifiers",
+      "Model Deployment: Packs algorithms into operational Python environments",
+      "Microsoft & SAP Collaboration: Aligned with corporate business requirements"
     ],
     link: "#"
   },
   {
-    title: "Multi-Agent AI Learning System",
-    tech: "Gemini APIs / ADK Agent Framework / PPTX Generators",
-    role: "AI Developer - Research Automation",
+    title: "AI EdTech Ecosystem",
+    tech: "React / Firebase / Google Gemini API",
+    role: "Full Stack Architect - EdTech",
     img: "/src/assets/project2_preview.jpg",
-    desc: "A hackathon-winning automation engine running parallel internet research. Utilizing specialized agent nodes, it groups a Master Orchestrator with secondary research and writing agents to scrape web resources, structure educational slides, and generate comprehensive learning logs automatically.",
+    desc: "An academic administration scheduler automating classroom logistics. Uses Google Gemini API to serve student tutor assistants, hosts databases on Firebase, and runs node-based algorithms to solve classroom timetabling constraints.",
     features: [
-      "Master Orchestrator: Dispatches sub-tasks to dedicated research agents",
-      "Slide Builder: Auto-generates structured PPT slideshows and notes from queries",
-      "Gemini API integrations running quick semantic parsing loops",
-      "Interactive QA terminal testing user memory and grading answers"
+      "Timetabling Solver: Auto-resolves teacher availability conflicts",
+      "Gemini Tutor Agent: Conversational chatbot providing course support",
+      "Firebase Database: Synchronizes logs, attendances, and credentials",
+      "Interactive HUD: Premium glassmorphic panel mapping scheduler outputs"
     ],
     link: "#"
   }
