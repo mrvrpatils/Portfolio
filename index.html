@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>M Vittal Rao | AI & Full Stack Developer Portfolio</title>
+    <meta name="description" content="Explore the interactive 3D WebGL Portfolio of Malipatil Vittal Rao, an AI & Full Stack Developer building smart solutions for agriculture and education." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Inline SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239b51e0' stroke-width='2'%3E%3Cpolygon points='12 2 2 22 22 22'/%3E%3C/svg%3E" />
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- 3D WebGL Canvas Background -->
+    <canvas id="webgl-canvas" class="webgl-canvas"></canvas>
+
+    <!-- Viewport Micro Grid Overlay -->
+    <div class="hud-grid-overlay"></div>
+    <div class="hud-scanlines"></div>
+
+    <!-- Viewport Angled Corner Brackets -->
+    <div class="hud-bracket top-left"></div>
+    <div class="hud-bracket top-right"></div>
+    <div class="hud-bracket bottom-left"></div>
+    <div class="hud-bracket bottom-right"></div>
+
+    <!-- Viewport Fixed Top Telemetry HUD -->
+    <div class="hud-top-telemetry">
+      <div class="telemetry-item cursor-coords">
+        <span class="hud-label">LOC</span> <span id="hud-val-coords">X: 0px | Y: 0px</span>
+      </div>
+      <div class="telemetry-item sys-fps">
+        <span class="hud-label">RENDER</span> <span id="hud-val-fps">60 FPS</span>
+      </div>
+      <div class="telemetry-item audio-drone">
+        <span class="hud-label">SYS_FREQ</span> <span id="hud-val-freq">OFF</span>
+      </div>
+      <div class="telemetry-item core-status">
+        <span class="status-indicator-dot"></span>
+        <span class="hud-label">SYS_CORE</span> <span class="status-text">ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Ambient Glow Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <!-- Custom Trailing Glow Cursors -->
+    <div id="custom-cursor" class="custom-cursor"><span class="cursor-tag-coords" id="cursor-coords-tag"></span></div>
+    <div id="custom-cursor-glow" class="custom-cursor-glow"></div>
+
+    <!-- UI Overlay Wrapper -->
+    <div class="ui-wrapper">
+      
+      <!-- Floating Navigation Bar -->
+      <header id="main-header" class="main-header" aria-label="Primary Navigation">
+        <nav class="nav-container">
+          <a href="#hero" class="nav-logo" id="nav-logo">
+            M Vittal Rao
+          </a>
+          
+          <ul class="nav-links" id="nav-links">
+            <li><a href="#hero" class="nav-link active" data-section="hero">Home</a></li>
+            <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+            <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+            <li><a href="#timeline" class="nav-link" data-section="timeline">Journey</a></li>
+            <li><a href="#highlights" class="nav-link" data-section="highlights">Insights</a></li>
+            <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme Mode" title="Toggle Light/Dark Theme">
+              <span class="theme-toggle-icon">
+                <svg class="moon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              </span>
+            </button>
+
+            <!-- Command Menu HUD Toggle Shortcut -->
+            <button id="cmd-menu-trigger" class="cmd-menu-trigger" aria-label="Open Command Menu" title="Open Command Menu (Ctrl + K)">
+              <span class="cmd-shortcut">CMD [Ctrl+K]</span>
+            </button>
+
+            <!-- Audio Feedback Control -->
+            <button id="sound-toggle" class="sound-toggle" aria-label="Toggle Sound Effects" title="Toggle Sound Effects">
+              <span class="sound-wave">
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+              </span>
+              <span class="sound-text">AUDIO: OFF</span>
+            </button>
+
+            <!-- Hamburger Button (Mobile) -->
+            <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle Navigation Menu">
+              <span class="hamburger-bar"></span>
+              <span class="hamburger-bar"></span>
+              <span class="hamburger-bar"></span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true">
+        <div class="drawer-header">
+          M Vittal Rao
+        </div>
+        <ul class="drawer-links">
+          <li><a href="#hero" class="drawer-link" data-section="hero">Home</a></li>
+          <li><a href="#about" class="drawer-link" data-section="about">About</a></li>
+          <li><a href="#projects" class="drawer-link" data-section="projects">Projects</a></li>
+          <li><a href="#timeline" class="drawer-link" data-section="timeline">Journey</a></li>
+          <li><a href="#highlights" class="drawer-link" data-section="highlights">Insights</a></li>
+          <li><a href="#contact" class="drawer-link" data-section="contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Main Layout -->
+      <main id="main-content">
+        
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="section-container hero-section">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="badge-tag">MVR | INTERACTIVE SYSTEM</span>
+              <span class="badge-divider">|</span>
+              <span class="badge-info">HYBRID DEVELOPMENT</span>
+            </div>
+            
+            <h1 class="hero-title">
+              M Vittal Rao <br>
+              <span id="hero-typewriter" class="gradient-text">AI Developer</span><span class="typewriter-cursor">|</span>
+            </h1>
+            
+            <p class="hero-description">
+              AI & Full Stack Developer building impactful solutions for education and agriculture. Combining mathematical precision with generative AI agents.
+            </p>
+            
+            <div class="hero-actions">
+              <a href="#projects" class="btn btn-primary btn-magnetic" id="hero-btn-projects">
+                <span>View Projects</span>
+                <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+              <button class="btn btn-secondary btn-magnetic resume-download-btn" id="hero-btn-resume">
+                <span>Download Resume</span>
+              </button>
+              <a href="#contact" class="btn btn-secondary btn-magnetic" id="hero-btn-contact">
+                <span>Contact Me</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Hero Subtle Scroll Indicator -->
+          <div class="scroll-indicator">
+            <div class="scroll-mouse">
+              <div class="scroll-wheel"></div>
+            </div>
+            <span class="scroll-text">SCROLL TO DISCOVER</span>
+          </div>
+        </section>
+
+        <!-- SECTION 2: ABOUT ME -->
+        <section id="about" class="section-container about-section">
+          <div class="section-header">
+            <div class="section-tag">IDENTITY INTERFACE</div>
+            <h2 class="section-title">Who I Am & What I Solve</h2>
+          </div>
+
+          <div class="about-grid">
+            <!-- Left: Premium Profile Panel with generated avatar -->
+            <div class="about-profile-panel glass-panel cyber-card">
+              <div class="avatar-frame">
+                <img src="/src/assets/avatar.png" alt="Malipatil Vittal Rao Avatar" class="avatar-img" />
+                <div class="avatar-glow"></div>
+              </div>
+              
+              <p class="about-mini-bio">
+                I’m a B.Tech student passionate about AI, full-stack development, and building real-world products that solve problems in education and agriculture.
+              </p>
+
+              <div class="education-panel">
+                <div class="edu-heading">CURRENT ACADEMICS</div>
+                <div class="edu-mrec-details">
+                  <span class="edu-degree">Bachelor of Technology (B.Tech)</span>
+                  <span class="edu-college">Malla Reddy Engineering College</span>
+                  <span class="edu-pursuing">Field: Computer Science & Technology - Pursuing</span>
+                </div>
+              </div>
+
+              <!-- Animated Stats Panel -->
+              <div class="stats-row">
+                <div class="stat-box">
+                  <span class="stat-number count-trigger" data-target="6">0</span>
+                  <span class="stat-label">AI Platforms</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-number count-trigger" data-target="86">0</span><span class="stat-number-percent">%</span>
+                  <span class="stat-label">ML Accuracy</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-number count-trigger" data-target="3">0</span>
+                  <span class="stat-label">B.Tech Years</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Bio Card & Custom Git Graph -->
+            <div class="about-bio-card glass-panel cyber-card">
+              <h3 class="card-title">Engineering Digital Impact</h3>
+              <p class="card-text">
+                I operate at the intersection of machine learning systems and modern web interfaces. By channeling core AI capabilities into accessible, responsive frameworks, I construct software solutions aimed at increasing digital inclusion across rural and academic networks.
+              </p>
+              <p class="card-text">
+                I actively design automation pipelines, custom dataset indexes, and multi-agent scaffolds designed to reduce manual work overhead and simplify digital interactions for farmers and students alike.
+              </p>
+
+              <!-- GitHub commit mesh -->
+              <div class="github-graph-container">
+                <div class="github-graph-header">
+                  <span class="graph-title">SECURE LOG COMMITS</span>
+                  <span class="graph-commits" id="git-graph-log">Hover grid nodes to read repository commits</span>
+                </div>
+                <div id="github-graph" class="github-graph">
+                  <!-- Generated via javascript main.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cyber Shell Terminal Command Deck -->
+          <div class="cyber-shell-deck glass-panel cyber-card mt-4">
+            <div class="shell-header">
+              <div class="shell-header-left">
+                <span class="shell-header-dot red"></span>
+                <span class="shell-header-dot yellow"></span>
+                <span class="shell-header-dot green"></span>
+                <span class="shell-title">M Vittal Rao - CORE TERMINAL - SECURE COCKPIT</span>
+              </div>
+              <div class="shell-header-right">
+                <span class="shell-diag-text">BAUD: 9600 | PORT: 5173 | ACTIVE</span>
+              </div>
+            </div>
+            <div class="shell-body">
+              <div class="shell-output" id="shell-output">
+                <div class="shell-row system-msg">M Vittal Rao OS [v2.26.1] - CORE SECURE INSTANCE</div>
+                <div class="shell-row system-msg">MOUNTING MACHINE LEARNING PREDICTION ENGINES... SUCCESS</div>
+                <div class="shell-row system-msg">ESTABLISHING FIREBASE CLOUD MATRIX BINDINGS... SUCCESS</div>
+                <div class="shell-row system-msg">CONNECTING GOOGLE GEMINI MULTI-AGENT COORDINATORS... SECURED</div>
+                <div class="shell-row system-msg">TYPE 'help' FOR AVAILABLE SHELL PROTOCOLS.</div>
+                <br>
+              </div>
+              <div class="shell-prompt-line">
+                <span class="shell-prompt-symbol">vittal@mvr-core:~$</span>
+                <input type="text" id="shell-input-field" class="shell-input-field" placeholder="Enter secure protocols here..." autocomplete="off" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: SKILLS -->
+        <section id="skills" class="section-container skills-section">
+          <div class="section-header">
+            <div class="section-tag">TECHNOLOGY CAPABILITIES</div>
+            <h2 class="section-title">System & Logic Skills</h2>
+          </div>
+
+          <div class="skills-grid">
+            <!-- FRONTEND -->
+            <div class="skill-category-card glass-panel">
+              <h3 class="category-title"><span class="category-num">01 |</span> Frontend Development</h3>
+              <div class="skill-meters-list">
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">React.js / Next.js</span>
+                    <span class="meter-val">85%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">HTML5 / CSS3</span>
+                    <span class="meter-val">90%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Tailwind CSS</span>
+                    <span class="meter-val">88%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 88%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BACKEND -->
+            <div class="skill-category-card glass-panel">
+              <h3 class="category-title"><span class="category-num">02 |</span> Backend & Databases</h3>
+              <div class="skill-meters-list">
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Python / Scripting</span>
+                    <span class="meter-val">92%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 92%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Firebase Systems</span>
+                    <span class="meter-val">85%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 85%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Node.js / Streamlit</span>
+                    <span class="meter-val">80%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 80%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI / MACHINE LEARNING -->
+            <div class="skill-category-card glass-panel">
+              <h3 class="category-title"><span class="category-num">03 |</span> AI & Machine Learning</h3>
+              <div class="skill-meters-list">
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Scikit-learn / CatBoost</span>
+                    <span class="meter-val">86%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 86%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">OpenCV / Computer Vision</span>
+                    <span class="meter-val">80%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 80%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Gemini APIs / AI Agents</span>
+                    <span class="meter-val">88%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 88%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TOOLS -->
+            <div class="skill-category-card glass-panel">
+              <h3 class="category-title"><span class="category-num">04 |</span> Tools & Platforms</h3>
+              <div class="skill-meters-list">
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">GitHub / Version Control</span>
+                    <span class="meter-val">90%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 90%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">VS Code / IDE Environments</span>
+                    <span class="meter-val">95%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 95%"></div></div>
+                </div>
+                <div class="skill-meter-item">
+                  <div class="meter-labels">
+                    <span class="meter-name">Figma / Kaggle Platforms</span>
+                    <span class="meter-val">78%</span>
+                  </div>
+                  <div class="meter-bar"><div class="meter-fill" style="width: 78%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic 3D word constellation trigger area -->
+          <div id="skills-3d-container" class="skills-3d-container mt-4" aria-label="Interactive 3D Skills Sphere">
+            <!-- Three.js Skill cloud will render inside here -->
+          </div>
+        </section>
+
+        <!-- SECTION 4: PROJECTS -->
+        <section id="projects" class="section-container projects-section">
+          <div class="section-header">
+            <div class="section-tag">SCIENTIFIC DEPLOYMENTS</div>
+            <h2 class="section-title">Featured Engagements</h2>
+          </div>
+
+          <div class="projects-grid">
+            <!-- PROJECT 1 -->
+            <article class="project-card glass-panel project-tilt" data-project="0" id="project-card-0">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project1_preview.jpg" alt="AGRISERVE Platform" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">01</span>
+                  <span class="project-tech">REACT.JS / FIREBASE / AGRI-AI</span>
+                </div>
+                <h3 class="project-title">AGRISERVE AI Portal</h3>
+                <p class="project-desc">AI agriculture platform facilitating labor allocation, machine EMI schedules, real-time product ordering, and multilingual Telugu guides.</p>
+              </div>
+            </article>
+
+            <!-- PROJECT 2 -->
+            <article class="project-card glass-panel project-tilt" data-project="1" id="project-card-1">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project2_preview.jpg" alt="Smart Irrigation Advisor" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">02</span>
+                  <span class="project-tech">PYTHON / ML / STREAMLIT</span>
+                </div>
+                <h3 class="project-title">Smart Irrigation Advisor</h3>
+                <p class="project-desc">Predictive irrigation planner aggregating meteorological indicators with ML modeling to recommend precise soil saturation values.</p>
+              </div>
+            </article>
+
+            <!-- PROJECT 3 -->
+            <article class="project-card glass-panel project-tilt" data-project="2" id="project-card-2">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project3_preview.jpg" alt="AI Education Management System" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">03</span>
+                  <span class="project-tech">REACT / FIREBASE / AI AGENTS</span>
+                </div>
+                <h3 class="project-title">AI EdTech Ecosystem</h3>
+                <p class="project-desc">Educational manager automating schedule generators, attendee logs, exam schedulers, and active Gemini tutor agent panels.</p>
+              </div>
+            </article>
+
+            <!-- PROJECT 4 -->
+            <article class="project-card glass-panel project-tilt" data-project="3" id="project-card-3">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project3_preview.jpg" alt="Medical Prescription Reader AI" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">04</span>
+                  <span class="project-tech">PYTHON / OCR / OPENCV / NLP</span>
+                </div>
+                <h3 class="project-title">Prescription Reader AI</h3>
+                <p class="project-desc">Optical character scanner thresholding script prescription sheets and resolving medicine dose summaries in visual chat windows.</p>
+              </div>
+            </article>
+
+            <!-- PROJECT 5 -->
+            <article class="project-card glass-panel project-tilt" data-project="4" id="project-card-4">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project1_preview.jpg" alt="Employee Salary Prediction" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">05</span>
+                  <span class="project-tech">SCIKIT-LEARN / CATBOOST / PYTHON</span>
+                </div>
+                <h3 class="project-title">Salary Category Predictor</h3>
+                <p class="project-desc">Business analytics classifier forecasting employee wage metrics using CatBoost models at 86.5% validation accuracy.</p>
+              </div>
+            </article>
+
+            <!-- PROJECT 6 -->
+            <article class="project-card glass-panel project-tilt" data-project="5" id="project-card-5">
+              <div class="project-img-wrapper">
+                <img src="/src/assets/project2_preview.jpg" alt="Multi-Agent AI Learning System" class="project-img" />
+                <div class="project-overlay">
+                  <span class="overlay-btn">EXPLORE SPECS</span>
+                </div>
+              </div>
+              <div class="project-info">
+                <div class="project-meta">
+                  <span class="project-num">06</span>
+                  <span class="project-tech">GEMINI APIS / AI AGENTS / ADK</span>
+                </div>
+                <h3 class="project-title">Multi-Agent AI Researcher</h3>
+                <p class="project-desc">Hackathon automation script chaining scraper, orchestrator, and slideshow generators for automated learning logs.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Interactive AI Agri-Sensor Telemetry Simulator (Agriserve Emulator) -->
+          <div class="agri-cockpit-wrapper glass-panel cyber-card mt-4">
+            <div class="cockpit-header">
+              <div class="cockpit-tag">REAL-TIME DATA SIMULATOR</div>
+              <h3 class="cockpit-title">AGRISERVE - Agri-AI Telemetry Cockpit</h3>
+              <p class="cockpit-desc">Test real-world machine learning predictive logic. Slide the ecological meters to observe instant simulated neural network inference recommendations.</p>
+            </div>
+            
+            <div class="cockpit-grid">
+              <!-- Left: Sliders Controls -->
+              <div class="cockpit-controls">
+                <div class="control-group">
+                  <div class="control-labels">
+                    <span class="control-name">SOIL MOISTURE SATURATION</span>
+                    <span class="control-val" id="val-soil-moisture">42%</span>
+                  </div>
+                  <input type="range" id="slider-soil-moisture" min="0" max="100" value="42" class="hud-slider" />
+                </div>
+                
+                <div class="control-group">
+                  <div class="control-labels">
+                    <span class="control-name">AMBIENT SOLAR RADIATION</span>
+                    <span class="control-val" id="val-solar-radiation">650 W/m²</span>
+                  </div>
+                  <input type="range" id="slider-solar-radiation" min="0" max="1200" value="650" class="hud-slider" />
+                </div>
+
+                <div class="control-group">
+                  <div class="control-labels">
+                    <span class="control-name">HUMIDITY METRIC</span>
+                    <span class="control-val" id="val-humidity">58%</span>
+                  </div>
+                  <input type="range" id="slider-humidity" min="0" max="100" value="58" class="hud-slider" />
+                </div>
+              </div>
+              
+              <!-- Right: Gauges Display -->
+              <div class="cockpit-gauges">
+                <div class="gauge-card">
+                  <div class="svg-gauge-container">
+                    <svg viewBox="0 0 100 100" class="gauge-svg">
+                      <!-- Base circle track -->
+                      <circle cx="50" cy="50" r="40" class="gauge-track-ring" />
+                      <!-- Glowing prediction arc -->
+                      <circle cx="50" cy="50" r="40" class="gauge-fill-ring" id="gauge-fill-moisture" stroke-dasharray="251.2" stroke-dashoffset="150" />
+                    </svg>
+                    <div class="gauge-inner-text">
+                      <span class="gauge-percent" id="prediction-percent">45%</span>
+                      <span class="gauge-label">IRRIG_INDEX</span>
+                    </div>
+                  </div>
+                  
+                  <div class="gauge-diagnostics">
+                    <div class="diag-row">
+                      <span class="diag-label">PUMP SYSTEM STATUS:</span>
+                      <span class="diag-val" id="pump-status">STANDBY</span>
+                    </div>
+                    <div class="diag-row">
+                      <span class="diag-label">AI PREDICTIVE DESCRIPTOR:</span>
+                      <span class="diag-val glow-text" id="moisture-advice" style="color:var(--color-cyan)">OPTIMAL SATURATION</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: JOURNEY & EXPERIENCE -->
+        <section id="timeline" class="section-container timeline-section">
+          <div class="section-header">
+            <div class="section-tag">ACADEMIC CHRONOLOGIES</div>
+            <h2 class="section-title">Journey & College Chronology</h2>
+          </div>
+
+          <div class="timeline-wrapper">
+            <!-- Glowing Timeline Central Line -->
+            <div class="timeline-line">
+              <div id="timeline-progress" class="timeline-progress"></div>
+            </div>
+
+            <!-- Event 1 -->
+            <div class="timeline-item timeline-left glass-panel timeline-reveal" id="timeline-item-0">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">2026</div>
+              <h3 class="timeline-title">Multi-Agent hackathons & Irrigation builds</h3>
+              <h4 class="timeline-company">COLLEGE PROJECTS & HACKATHONS</h4>
+              <p class="timeline-desc">Pioneered Multi-Agent AI research automation utilizing Google Gemini. Developed the weather-based Smart Irrigation advisor. Refined advanced algorithms in linear algebra and deep neural networks.</p>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="timeline-item timeline-right glass-panel timeline-reveal" id="timeline-item-1">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">2025</div>
+              <h3 class="timeline-title">AGRISERVE launch & OCR systems</h3>
+              <h4 class="timeline-company">REAL-WORLD APPLICATIONS</h4>
+              <p class="timeline-desc">Engineered the AGRISERVE agricultural support platform. Deployed the AI Education system for class schedule automation. Synthesized OpenCV handwriting medicine transcription readers.</p>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="timeline-item timeline-left glass-panel timeline-reveal" id="timeline-item-2">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">2024</div>
+              <h3 class="timeline-title">Started Web Dev & ML basics</h3>
+              <h4 class="timeline-company">MALLA REDDY ENGINEERING COLLEGE</h4>
+              <p class="timeline-desc">Initiated computer science B.Tech courses. Mastered core scripting languages, data schemas, Python web scraping, responsive design systems, and frontend frameworks.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 6: ACHIEVEMENTS & TROPHIES -->
+        <section id="achievements" class="section-container achievements-section">
+          <div class="section-header">
+            <div class="section-tag">CREDENTIAL ASSETS</div>
+            <h2 class="section-title">System Awards & Achievements</h2>
+          </div>
+
+          <div class="achievements-grid">
+            <!-- Card 1 -->
+            <div class="achievement-card glass-panel">
+              <div class="achievement-badge-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trophy-svg"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path><path d="M12 2a7.7 7.7 0 0 1 7.54 8H4.46A7.7 7.7 0 0 1 12 2z"></path></svg>
+              </div>
+              <h3 class="achievement-title">Ecosystem Prototype Builder</h3>
+              <p class="achievement-desc">Built multiple AI real-world products for core fields like agriculture and education, targeting high social utility.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="achievement-card glass-panel">
+              <div class="achievement-badge-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trophy-svg"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+              </div>
+              <h3 class="achievement-title">Agri-tech Venture Architect</h3>
+              <p class="achievement-desc">Engineered and designed complete regional startup architectures (AGRISERVE) to support farmers via smart tech accessibility.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="achievement-card glass-panel">
+              <div class="achievement-badge-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trophy-svg"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <h3 class="achievement-title">Regional Language Datasets</h3>
+              <p class="achievement-desc">Actively contributed language data mapping scripts to help optimize Telugu Large Language Model (LLM) interfaces.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 7: INFINITE TECH MARQUEE (Visual stack instead of text) -->
+        <section id="marquee-section" class="marquee-section">
+          <div class="marquee-track">
+            <div class="marquee-content">
+              <span class="marquee-item">Python</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">React.js</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Firebase</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Google Gemini API</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Streamlit</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">TensorFlow</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">OpenCV</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Tailwind CSS</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Node.js</span>
+              
+              <!-- Repeat for seamless scroll loop -->
+              <span class="marquee-item">Python</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">React.js</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Firebase</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Google Gemini API</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Streamlit</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">TensorFlow</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">OpenCV</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Tailwind CSS</span>
+              <span class="marquee-item">•</span>
+              <span class="marquee-item">Node.js</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 8: TESTIMONIALS -->
+        <section id="testimonials" class="section-container testimonials-section">
+          <div class="section-header">
+            <div class="section-tag">MENTOR FEEDBACK</div>
+            <h2 class="section-title">Teammate & Mentor Insights</h2>
+          </div>
+
+          <div class="testimonials-grid">
+            <div class="testimonial-card glass-panel">
+              <p class="testimonial-quote">"Vittal stands out due to his direct focus on local social impact projects. His AGRISERVE concept addresses genuine gaps for farm workers using intuitive, modern UI systems."</p>
+              <div class="testimonial-user">
+                <span class="user-name">Teammate - Hackathon '25</span>
+                <span class="user-role">Malla Reddy Engineering College</span>
+              </div>
+            </div>
+
+            <div class="testimonial-card glass-panel">
+              <p class="testimonial-quote">"Integrating complex Google Gemini multi-agent workflows into classroom timetables and OCR prescription scanning shows solid full-stack design capabilities."</p>
+              <div class="testimonial-user">
+                <span class="user-name">Project Mentor - AI Labs</span>
+                <span class="user-role">Software Engineering Department</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 9: INSIGHTS BLOGS -->
+        <section id="highlights" class="section-container highlights-section">
+          <div class="section-header">
+            <div class="section-tag">INTELLECTUAL CAPACITIES</div>
+            <h2 class="section-title">Insights & Blog Logs</h2>
+          </div>
+
+          <div class="blogs-grid">
+            <!-- Article 1 -->
+            <article class="blog-card glass-panel">
+              <span class="blog-date">2026 - SYSTEM LOG</span>
+              <h3 class="blog-title">How I Built a Medical Prescription Reader AI</h3>
+              <p class="blog-desc">Detailing the OpenCV grayscale thresholding and character parsing scripts used to convert cursive prescription manuscripts into clean summaries.</p>
+              <a href="#" class="blog-link">READ ARTICLE</a>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="blog-card glass-panel">
+              <span class="blog-date">2025 - SYSTEM LOG</span>
+              <h3 class="blog-title">Building Smart Irrigation Systems Using AI</h3>
+              <p class="blog-desc">Exploring how Python weather API scrapers compile climate matrices to feed Scikit-learn predictive algorithms, optimizing regional water saturation schedules.</p>
+              <a href="#" class="blog-link">READ ARTICLE</a>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="blog-card glass-panel">
+              <span class="blog-date">2024 - SYSTEM LOG</span>
+              <h3 class="blog-title">My Journey Coding Automated School Engines</h3>
+              <p class="blog-desc">Documenting classroom timetable database structures, automated scheduler conflict solvers, and Gemini teacher agent architectures.</p>
+              <a href="#" class="blog-link">READ ARTICLE</a>
+            </article>
+          </div>
+        </section>
+
+        <!-- SECTION 10: CONTACT -->
+        <section id="contact" class="section-container contact-section">
+          <canvas id="contact-particles" class="contact-particles"></canvas>
+          
+          <div class="contact-card glass-panel">
+            <div class="contact-layout">
+              <div class="contact-info-panel">
+                <div class="section-tag">TRANSMISSION ROUTING</div>
+                <h2 class="contact-title">Let's Establish<br>Secure Coordinates</h2>
+                <p class="contact-text">
+                  Have an agricultural ML problem, automated academy idea, or collaborative B.Tech project? Let's connect the coordinates.
+                </p>
+                
+                <div class="contact-methods">
+                  <div class="method-item">
+                    <span class="method-icon">COORDINATES:</span>
+                    <span class="method-link">Hyderabad, India - MREC</span>
+                  </div>
+                  <div class="method-item">
+                    <span class="method-icon">SYSTEM EMAIL:</span>
+                    <div class="copy-email-wrapper">
+                      <a href="mailto:vittalrao.m@gmail.com" class="method-link" id="email-text">vittalrao.m@gmail.com</a>
+                      <button id="copy-email-btn" class="copy-email-btn" title="Copy Email to Clipboard" aria-label="Copy Email address">
+                        <span id="copy-btn-text">COPY</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="social-channels">
+                  <span class="social-label">CORE MATRICES:</span>
+                  <div class="social-links-grid">
+                    <a href="https://github.com" target="_blank" class="social-btn btn-magnetic" aria-label="GitHub Portal">GitHub</a>
+                    <a href="https://linkedin.com" target="_blank" class="social-btn btn-magnetic" aria-label="LinkedIn Grid">LinkedIn</a>
+                    <a href="https://instagram.com" target="_blank" class="social-btn btn-magnetic" aria-label="Instagram Grid">Instagram</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Form -->
+              <form id="contact-form" class="contact-form" novalidate>
+                <div class="form-group">
+                  <label for="form-name" class="form-label">OPERATOR IDENTIFIER / NAME</label>
+                  <input type="text" id="form-name" name="name" class="form-input" placeholder="e.g. Mentor Srinivas" required />
+                  <span class="form-error-msg" id="name-error">Operator name must be declared.</span>
+                </div>
+                
+                <div class="form-group">
+                  <label for="form-email" class="form-label">DIGITAL COORDINATES / EMAIL</label>
+                  <input type="email" id="form-email" name="email" class="form-input" placeholder="e.g. srinivas@college.edu" required />
+                  <span class="form-error-msg" id="email-error">Provide a valid digital coordinate.</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-message" class="form-label">TRANSMISSION ENVELOPE / MESSAGE</label>
+                  <textarea id="form-message" name="message" rows="4" class="form-input form-textarea" placeholder="Outline the collaborative AI mission..." required></textarea>
+                  <span class="form-error-msg" id="message-error">Transmission logs cannot be blank.</span>
+                </div>
+
+                <button type="submit" id="form-submit-btn" class="btn btn-primary btn-magnetic form-submit-btn">
+                  <span>SEND TRANSMISSION</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Floating Cyber Footer -->
+      <footer class="main-footer">
+        <div class="footer-content">
+          <p class="footer-copy">&copy; 2026 M VITTAL RAO - DESIGNED & DEVELOPED BY M VITTAL RAO</p>
+          <div class="footer-status">
+            <span class="status-marker"></span> HYBRID AI ENGINE: OPERATIONAL
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- PROJECT SPECS OVERLAY MODAL -->
+    <div id="project-modal" class="project-modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-backdrop" id="modal-close-backdrop"></div>
+      <div class="modal-content glass-panel">
+        <button class="modal-close" id="modal-close-btn" aria-label="Close Specifications Modal">&times;</button>
+        
+        <div class="modal-grid">
+          <!-- Left modal panel -->
+          <div class="modal-media-panel">
+            <img src="" id="modal-img" alt="Project Showcase" class="modal-img" />
+          </div>
+          <!-- Right modal details -->
+          <div class="modal-info-panel">
+            <div class="modal-tag" id="modal-tag">PROJECT DEPLOYMENT LOGS</div>
+            <h3 class="modal-title" id="modal-title">Project Title</h3>
+            
+            <div class="modal-metadata">
+              <div class="meta-item">
+                <span class="meta-label">DEPLOYMENT STACK:</span>
+                <span class="meta-val" id="modal-tech">React, Firebase</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">MISSION OBJECTIVE:</span>
+                <span class="meta-val" id="modal-role">Smart Agriculture</span>
+              </div>
+            </div>
+
+            <div class="modal-details-desc">
+              <h4 class="details-heading">MISSION LOG</h4>
+              <p id="modal-description-full">Detailed description goes here...</p>
+              
+              <h4 class="details-heading">DEPLOYED PIPELINES</h4>
+              <ul class="modal-features-list" id="modal-features-list">
+                <!-- Injected dynamically -->
+              </ul>
+            </div>
+
+            <div class="modal-actions">
+              <a href="#" class="btn btn-primary" id="modal-visit-link" target="_blank">RUN SECURE DEMO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROL HUD MENU (CTRL + K) -->
+    <div id="cmd-hud" class="cmd-hud" aria-hidden="true" role="dialog" aria-labelledby="cmd-hud-title">
+      <div class="cmd-hud-backdrop" id="cmd-hud-close-backdrop"></div>
+      <div class="cmd-hud-panel glass-panel">
+        <div class="cmd-hud-search-bar">
+          <span class="cmd-hud-search-icon">&gt;_</span>
+          <input type="text" id="cmd-hud-search-input" placeholder="Search system routes..." aria-label="Search Command Grid" autocomplete="off" />
+          <span class="cmd-hud-close-shortcut">ESC</span>
+        </div>
+        <div class="cmd-hud-results" id="cmd-hud-results">
+          <!-- Items injected via main.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING AI ASSISTANT CHATBOT -->
+    <div id="chat-widget" class="chat-widget glass-panel collapsed" aria-label="AI Buddy Chatbot">
+      <!-- Chat Widget Header -->
+      <div class="chat-header" id="chat-header-trigger">
+        <div class="chat-header-info">
+          <span class="chat-status-pulse"></span>
+          <div class="chat-header-text">
+            <span class="chat-header-name">M VITTAL RAO ASSISTANT</span>
+            <span class="chat-header-status">Online - AI Buddy</span>
+          </div>
+        </div>
+        <button id="chat-toggle-btn" class="chat-toggle-btn" aria-label="Toggle AI Chat widget">
+          <svg class="chat-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Chat Widget Body -->
+      <div class="chat-body">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-message bot">
+            <p>Salutations! I am Malipatil Vittal Rao's custom portfolio chatbot. Ask me about AGRISERVE AgTech, my B.Tech studies, EdTech pipelines, or core skills!</p>
+          </div>
+        </div>
+        
+        <!-- Suggestions Chips -->
+        <div class="chat-chips">
+          <button class="chat-chip" data-query="Tell me about AGRISERVE">AGRISERVE</button>
+          <button class="chat-chip" data-query="What is the Smart Irrigation Advisor?">Irrigation AI</button>
+          <button class="chat-chip" data-query="What programming skills do you have?">Programming Skills</button>
+          <button class="chat-chip" data-query="Open resume option">Download Resume</button>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form id="chat-input-form" class="chat-input-form">
+          <input type="text" id="chat-input-field" placeholder="Ask AI Assistant..." autocomplete="off" required />
+          <button type="submit" class="chat-send-btn" aria-label="Send Query">
+            <svg class="chat-send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Module Loading -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
